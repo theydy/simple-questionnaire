@@ -5,9 +5,12 @@
       {{index}}.{{content}}
       <span class="mulit-hint" v-if="mulitHint">【多选题】</span>
     </div>
-    <this-checkbox :options="options" v-if="type === typeMulit" @selectCheckboxOption="selectCheckboxOption"></this-checkbox>
-    <this-radiobox :options="options" v-if="type === typeSingle" @selectRadioboxOption="selectRadioboxOption"></this-radiobox>
-    <this-input v-if="type === typeText" @changeInputValue="changeInputValue"></this-input>
+    <component
+      :is="getComponentName"
+      :options="options"
+      :checked-value="checkedValue"
+      @change-value="changeValue"
+    ></component>
     <div class="valid-hint">
       {{currentHint}}
     </div>
@@ -44,17 +47,7 @@ export default {
     options: {
       type: Array,
       default () {
-        return [
-          {
-            label: '选项一'
-          },
-          {
-            label: '选项二'
-          },
-          {
-            label: '选项三'
-          }
-        ];
+        return [];
       }
     },
     checkedValue: {
@@ -77,14 +70,17 @@ export default {
       validError: true
     };
   },
-  created () {
-    this.typeSingle = TYPE_SING;
-    this.typeMulit = TYPE_MULIT;
-    this.typeText = TYPE_TEXT;
-  },
   computed: {
     mulitHint () {
       return this.type === TYPE_MULIT;
+    },
+    getComponentName () {
+      let type = {
+        [TYPE_SING]: 'ThisRadiobox',
+        [TYPE_MULIT]: 'ThisCheckbox',
+        [TYPE_TEXT]: 'ThisInput'
+      }
+      return type[this.type];
     }
   },
   components: {
@@ -93,23 +89,9 @@ export default {
     ThisInput: () => import('@/components/this-input/this-input')
   },
   methods: {
-    selectCheckboxOption (selectlist) {
-      let ret = [];
-      selectlist.forEach((item, idx) => {
-        if (item) {
-          ret.push(this.checkedValue[idx])
-        }
-      });
-      this.answer = ret;
-      this.validData()
-    },
-    selectRadioboxOption () {
-      this.answer = this.checkedValue[0];
-      this.validData();
-    },
-    changeInputValue (value) {
+    changeValue (value) {
       this.answer = value;
-      this.validData();
+      this.validData()
     },
     validData () {
       if (this.type === TYPE_MULIT || this.type === TYPE_SING) {
@@ -148,6 +130,12 @@ export default {
         }
       }
       return flag;
+    },
+    submit () {
+      this.validData();
+      if (this.validError) {
+        this.$emit('returnAnswer', this.answer);
+      }
     }
   }
 };
@@ -187,6 +175,7 @@ export default {
   padding-left: 12px;
   border-radius: 4px;
   font-size: 12px;
+  height: 38px;
   line-height: 38px;
   opacity: 0;
 }

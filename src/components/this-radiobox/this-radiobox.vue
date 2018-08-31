@@ -1,7 +1,11 @@
 <template>
   <div class="radiobox">
     <div class="options">
-      <div class="option" v-for="(item, index) in options" :key="index" @click="selectOption($event, index)">
+      <div class="option"
+        v-for="(item, index) in options"
+        :key="index"
+        @click="selectOption($event, index)"
+      >
         <div class="box" :class="{'selected': selected === index}"></div>
         <label class="label">{{item.label}}</label>
       </div>
@@ -15,17 +19,13 @@ export default {
     options: {
       type: Array,
       default () {
-        return [
-          {
-            label: '选项一'
-          },
-          {
-            label: '选项二'
-          },
-          {
-            label: '选项三'
-          }
-        ];
+        return [];
+      }
+    },
+    checkedValue: {
+      type: Array,
+      default () {
+        return [];
       }
     }
   },
@@ -37,7 +37,7 @@ export default {
   methods: {
     selectOption ($event, index) {
       this.selected = index;
-      this.$emit('selectRadioboxOption');
+      this.$emit('change-value', this.checkedValue[this.selected]);
     }
   }
 };

@@ -1,7 +1,11 @@
 <template>
   <div class="checkbox">
     <div class="options">
-      <div class="option" v-for="(item, index) in options" :key="index" @click="selectOption($event, index)">
+      <div class="option"
+        v-for="(item, index) in options"
+        :key="index"
+        @click="selectOption($event, index)"
+      >
         <div class="box" :class="selectlist[index] ? 'selected' : ''"></div>
         <label class="label">{{item.label}}</label>
       </div>
@@ -15,17 +19,13 @@ export default {
     options: {
       type: Array,
       default () {
-        return [
-          {
-            label: '选项一'
-          },
-          {
-            label: '选项二'
-          },
-          {
-            label: '选项三'
-          }
-        ];
+        return [];
+      }
+    },
+    checkedValue: {
+      type: Array,
+      default () {
+        return [];
       }
     }
   },
@@ -44,7 +44,13 @@ export default {
   methods: {
     selectOption ($event, index) {
       this.$set(this.selectlist, index, !this.selectlist[index]);
-      this.$emit('selectCheckboxOption', this.selectlist);
+      let ret = [];
+      this.selectlist.forEach((item, idx) => {
+        if (item) {
+          ret.push(this.checkedValue[idx])
+        }
+      });
+      this.$emit('change-value', ret);
     }
   }
 };
