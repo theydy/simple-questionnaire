@@ -2,7 +2,7 @@
   <div class="question" :class="{'valid-error': !validError }">
     <div class="title">
       <span class="require" v-if="required">*</span>
-      {{index}}.{{content}}
+      {{index + 1}}.{{content}}
       <span class="mulit-hint" v-if="mulitHint">【多选题】</span>
     </div>
     <component

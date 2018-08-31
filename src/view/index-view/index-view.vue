@@ -5,7 +5,7 @@
         :key="index" v-bind="item"
         ref="question"
         @returnAnswer="returnAnswer"
-        :index="index + 1"
+        :index="index"
       ></this-question>
       <div class="question-submit" @click="submitQuestion">
           提交

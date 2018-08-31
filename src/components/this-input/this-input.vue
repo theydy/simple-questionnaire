@@ -2,7 +2,7 @@
   <div class="input">
     <div class="options">
       <div class="option">
-          <input class="text" type="text" v-model="value">
+        <input class="text" type="text" v-model="value">
       </div>
     </div>
   </div>

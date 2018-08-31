@@ -2,8 +2,36 @@
     <div class="test">
       <div class="create-wrapper">
         <div class="show-list">
+          <div class="question"
+            v-for="(item, index) in question"
+            :key="index"
+          >
+            <div class="title">
+              {{index + 1}}.<input class="text" type="text" :value="item.content">
+            </div>
+            <template v-if="item.options">
+              <div class="options">
+                <div class="option"
+                  v-for="(op, idx) in item.options"
+                  :key="idx"
+                >
+                  <input class="text" type="text" :value="op.label">
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <div class="options">
+                <div class="option">
+                  <input class="text" type="text">
+                </div>
+              </div>
+            </template>
+          </div>
         </div>
         <div class="operator">
+          <button>单选题</button>
+          <button>多选题</button>
+          <button>问题题</button>
         </div>
       </div>
     </div>
